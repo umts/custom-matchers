@@ -1,0 +1,10 @@
+Metrics/LineLength:
+  Max: 100
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'lib/umts-custom-cops/version.rb'
+
+Style/FileName:
+  Enabled: false
