@@ -1,6 +1,6 @@
 # UmtsCustomMatchers
 
-Custom RSpec Rails-related matcher, used for UMass Transit's internal Rails development process.
+Custom RSpec Rails-related matchers, used for UMass Transit's internal Rails development process.
 
 Primary contributor is @dfaulken.
 
