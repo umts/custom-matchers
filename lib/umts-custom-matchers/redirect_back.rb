@@ -1,4 +1,4 @@
-require 'rspec/rails'
+require 'rspec/rails/matchers'
 
 module UmtsCustomMatchers
   class RedirectBack
