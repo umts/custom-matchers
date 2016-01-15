@@ -1,6 +1,14 @@
 Metrics/LineLength:
   Max: 100
 
+# I know which one I want to write.
+Style/AndOr:
+  Enabled: false
+
+# And again.
+Style/IfUnlessModifier:
+  Enabled: false
+
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
