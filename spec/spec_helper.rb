@@ -5,5 +5,5 @@ require 'umts-custom-matchers'
 include UmtsCustomMatchers
 
 class TestApplication < Rails::Application
-  self.config.secret_key_base = 'A secret, secret key'
+  config.secret_key_base = 'A secret, secret key'
 end

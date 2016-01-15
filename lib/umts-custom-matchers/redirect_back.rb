@@ -10,7 +10,7 @@ module UmtsCustomMatchers
 
     def matches?(code)
       path = 'http://test.host/redirect'
-      @scope.request.env['HTTP_STATUS'] = path
+      @scope.request.env['HTTP_REFERER'] = path
       return false unless code.is_a? Proc
       code.call
       STATUS_CODE_MATCHER.new(:redirect).matches?(@scope.response) &&
