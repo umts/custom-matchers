@@ -7,6 +7,7 @@ module UmtsCustomMatchers
     REDIRECT_PATH_MATCHER = MATCHER_MODULE::RedirectTo::RedirectTo
 
     ALLOWED_REQUEST_TYPES = [ActionController::TestRequest].freeze
+    ALLOWED_RESPONSE_TYPES = [ActionController::TestResponse].freeze
 
     def initialize(scope)
       @scope = scope
@@ -17,13 +18,16 @@ module UmtsCustomMatchers
     def matches?(code)
       path = 'http://test.host/redirect'
 
-      unless @scope.respond_to? :request, :response
+      unless @scope.respond_to?(:request) && @scope.respond_to?(:response)
         fail_spec_type and return false
       end
       unless ALLOWED_REQUEST_TYPES.include? @scope.request.class
         fail_request_type and return false
       end
-      @scope.request.env['HTTP_REFERER'] = path
+      unless ALLOWED_RESPONSE_TYPES.include? @scope.response.class
+        fail_response_type and return false
+      end
+      @scope.request.env['HTTP_REFERER'] ||= path
       unless code.is_a? Proc
         fail_input_type code and return false
       end
@@ -67,6 +71,12 @@ module UmtsCustomMatchers
       @message = "expected test request to be one of: \
                   #{ALLOWED_REQUEST_TYPES.join ', '}; \
                   but was #{@scope.request.class}"
+    end
+
+    def fail_response_type
+      @message = "expected test response to be one of: \
+                  #{ALLOWED_RESPONSE_TYPES.join ', '}; \
+                  but was #{@scope.response.class}"
     end
 
     def fail_spec_type
