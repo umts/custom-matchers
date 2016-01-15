@@ -1,3 +1,5 @@
+require 'rspec/rails'
+
 module UmtsCustomMatchers
   class RedirectBack
     MATCHER_MODULE = RSpec::Rails::Matchers
