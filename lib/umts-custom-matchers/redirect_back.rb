@@ -1,14 +1,28 @@
-require 'rspec/expectations'
+module UmtsCustomMatchers
+  class RedirectBack
+    MATCHER_MODULE = RSpec::Rails::Matchers
+    STATUS_CODE_MATCHER = MATCHER_MODULE::HaveHttpStatus::GenericStatus
+    REDIRECT_PATH_MATCHER = MATCHER_MODULE::RedirectTo::RedirectTo
 
-RSpec::Matchers.define :redirect_back do
-  supports_block_expectations
+    def initialize(scope)
+      @scope = scope
+    end
 
-  match do |object|
-    return false unless object.is_a? Proc
-    path = 'http://test.host/redirect'
-    request.env['HTTP_REFERER'] = path
-    object.call
-    expect(response).to have_http_status :redirect
-    expect(response).to redirect_to path
+    def matches?(code)
+      path = 'http://test.host/redirect'
+      @scope.request.env['HTTP_STATUS'] = path
+      return false unless code.is_a? Proc
+      code.call
+      STATUS_CODE_MATCHER.new(:redirect).matches?(@scope.response) &&
+        REDIRECT_PATH_MATCHER.new(@scope, path).matches?(true)
+    end
+
+    def supports_block_expectations?
+      true
+    end
+  end
+
+  def redirect_back
+    RedirectBack.new self
   end
 end
