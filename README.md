@@ -4,6 +4,11 @@ Custom RSpec Rails-related matchers, used for UMass Transit's internal Rails dev
 
 Primary contributor is @dfaulken.
 
+[![Build Status](https://travis-ci.org/umts/custom-matchers.svg?branch=master)](https://travis-ci.org/umts/custom-matchers)
+[![Test Coverage](https://codeclimate.com/github/umts/custom-matchers/badges/coverage.svg)](https://codeclimate.com/github/umts/custom-matchers/coverage)
+[![Code Climate](https://codeclimate.com/github/umts/custom-matchers/badges/gpa.svg)](https://codeclimate.com/github/umts/custom-matchers)
+[![Issue Count](https://codeclimate.com/github/umts/custom-matchers/badges/issue_count.svg)](https://codeclimate.com/github/umts/custom-matchers)
+
 ## Installation
 
 Add this line to your application's Gemfile:
