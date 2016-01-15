@@ -24,7 +24,9 @@ Or install it yourself as:
 
 Require the matchers in your RSpec configuration file:
 
-    $ require 'umts-custom-matchers'
+```ruby
+require 'umts-custom-matchers'
+```
 
 And include them:
 
