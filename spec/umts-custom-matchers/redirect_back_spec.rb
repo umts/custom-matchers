@@ -2,8 +2,22 @@ require 'spec_helper'
 require 'pry-byebug'
 
 describe RedirectBack do
-  let(:scope) { double () }
-  let(:matcher) { RedirectBack.new scope }
+  let(:scope) { double }
+  subject(:matcher) { RedirectBack.new scope }
+
+  it 'supports block expectations' do
+    expect(matcher.supports_block_expectations?).to be true
+  end
+
+  it 'has the correct negation failure message' do
+    expect(matcher.failure_message_when_negated)
+      .to include 'expected', 'not to redirect back', 'but did'
+  end
+
+  it 'can be invoked with the helper method' do
+    expect(redirect_back).to be_a RedirectBack
+  end
+
   context 'example scope has response but no request' do
     it 'fails with expected message' do
       allow(scope).to receive(:response).and_return ActionController::TestResponse.new
@@ -56,7 +70,7 @@ describe RedirectBack do
         end
       end
       context 'input is a Proc' do
-        let(:input) { Proc.new{ :hello } }
+        let(:input) { Proc.new { :hello } }
         context 'response has incorrect status code' do
           let(:response) { ActionController::TestResponse.new 200 }
           it 'fails with expected message' do
