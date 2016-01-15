@@ -3,6 +3,7 @@ rvm:
   - 2.1.8
   - 2.2.4
   - 2.3.0
+env: CODECLIMATE_REPO_TOKEN=2e3996c4e1980943b0b1350ecfccc3c7f1adf90952d7a6c176b4d4bcf4e6b0c6
 before_install: gem install bundler
 script: bundle exec rake
 notifications:
