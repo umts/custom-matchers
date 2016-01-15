@@ -22,7 +22,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Require the matchers in your RSpec configuration file:
+
+    $ require 'umts-custom-matchers'
+
+And include them:
+
+```ruby
+RSpec.configure do |config|
+  # ...
+  config.include UmtsCustomMatchers
+end
+```
 
 ## Development
 
