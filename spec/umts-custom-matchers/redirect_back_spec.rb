@@ -70,7 +70,7 @@ describe RedirectBack do
         end
       end
       context 'input is a Proc' do
-        let(:input) { Proc.new { :hello } }
+        let(:input) { proc { :hello } }
         context 'response has incorrect status code' do
           let(:response) { ActionController::TestResponse.new 200 }
           it 'fails with expected message' do
