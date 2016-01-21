@@ -18,10 +18,13 @@ describe RedirectBack do
     expect(redirect_back).to be_a RedirectBack
   end
 
+  let(:result) { matcher.matches? input }
+  let(:input) { :anything } # like, literally anything for now
+
   context 'example scope has response but no request' do
     it 'fails with expected message' do
       allow(scope).to receive(:response).and_return ActionController::TestResponse.new
-      expect(matcher.matches? :anything).to be false
+      expect(result).to be false
       expect(matcher.failure_message).to include 'only valid for controller specs'
     end
   end
@@ -29,7 +32,7 @@ describe RedirectBack do
   context 'example scope has request but no response' do
     it 'fails with expected message' do
       allow(scope).to receive(:request).and_return ActionController::TestRequest.new
-      expect(matcher.matches? :anything).to be false
+      expect(result).to be false
       expect(matcher.failure_message).to include 'only valid for controller specs'
     end
   end
@@ -43,7 +46,7 @@ describe RedirectBack do
       let(:request) { ActionDispatch::Request.new({}) }
       let(:response) { ActionController::TestResponse.new }
       it 'fails with expected message' do
-        expect(matcher.matches? :anything).to be false
+        expect(result).to be false
         expect(matcher.failure_message).to include 'expected test request to be',
                                                    'ActionController::TestRequest',
                                                    'but was ActionDispatch::Request'
@@ -53,7 +56,7 @@ describe RedirectBack do
       let(:request) { ActionController::TestRequest.new }
       let(:response) { ActionDispatch::Response.new }
       it 'fails with expected message' do
-        expect(matcher.matches? :anything).to be false
+        expect(result).to be false
         expect(matcher.failure_message).to include 'expected test response to be',
                                                    'ActionController::TestResponse',
                                                    'but was ActionDispatch::Response'
@@ -63,8 +66,9 @@ describe RedirectBack do
       let(:request) { ActionController::TestRequest.new }
       let(:response) { ActionController::TestResponse.new }
       context 'input is not a Proc' do
+        let(:input) { :a_symbol }
         it 'fails with expected message' do
-          expect(matcher.matches? :a_symbol).to be false
+          expect(result).to be false
           expect(matcher.failure_message).to include 'expected block argument',
                                                      'but received Symbol'
         end
@@ -74,7 +78,7 @@ describe RedirectBack do
         context 'response has incorrect status code' do
           let(:response) { ActionController::TestResponse.new 200 }
           it 'fails with expected message' do
-            expect(matcher.matches? input).to be false
+            expect(result).to be false
             expect(matcher.failure_message).to include 'expected the response',
                                                        'to have a redirect status code',
                                                        'but it was 200'
@@ -85,14 +89,14 @@ describe RedirectBack do
             let(:response) { ActionController::TestResponse.new 302 }
             it 'fails with expected message' do
               allow(scope).to receive(:assert_redirected_to).and_raise Minitest::Assertion
-              expect(matcher.matches? input).to be false
+              expect(result).to be false
             end
           end
           context 'response redirects back to given URL' do
             let(:response) { ActionController::TestResponse.new 302 }
             it 'passes' do
               allow(scope).to receive(:assert_redirected_to).and_return true
-              expect(matcher.matches? input).to be true
+              expect(result).to be true
             end
           end
         end
