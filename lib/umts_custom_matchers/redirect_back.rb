@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'action_controller'
 require 'action_controller/test_case'
 require 'rspec/rails/matchers'
@@ -45,6 +47,8 @@ module UmtsCustomMatchers
       end
       true
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
     def failure_message
       @message

@@ -1,18 +1,15 @@
-Metrics/LineLength:
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.4
+
+Layout/LineLength:
   Max: 100
 
-# I know which one I want to write.
-Style/AndOr:
-  Enabled: false
-
-# And again.
-Style/IfUnlessModifier:
-  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
 
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'lib/umts-custom-cops/version.rb'
-
-Style/FileName:
-  Enabled: false

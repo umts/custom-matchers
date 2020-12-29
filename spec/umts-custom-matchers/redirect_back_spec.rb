@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe RedirectBack do
-  subject(:matcher) { RedirectBack.new scope }
+describe UmtsCustomMatchers::RedirectBack do
+  subject(:matcher) { described_class.new scope }
 
   let(:scope) { double }
   let(:controller_class) { ActionController::Base }
@@ -27,7 +29,8 @@ describe RedirectBack do
   end
 
   it 'can be invoked with the helper method' do
-    expect(redirect_back).to be_a RedirectBack
+    obj = Class.new { include UmtsCustomMatchers }.new
+    expect(obj.redirect_back).to be_a described_class
   end
 
   context 'example scope has response but no request' do
