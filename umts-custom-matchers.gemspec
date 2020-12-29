@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'umts-custom-matchers/version'
+require 'umts_custom_matchers/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'umts-custom-matchers'
@@ -22,11 +22,9 @@ Gem::Specification.new do |spec|
   end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec)/}) }
-  spec.bindir        = 'exe'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'rspec-rails', '~>3.0'
+  spec.add_dependency 'rspec-rails', '>= 3.0', '<= 5.0'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'codeclimate-test-reporter'

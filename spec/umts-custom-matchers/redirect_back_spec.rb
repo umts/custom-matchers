@@ -1,9 +1,21 @@
 require 'spec_helper'
-require 'pry-byebug'
 
 describe RedirectBack do
-  let(:scope) { double }
   subject(:matcher) { RedirectBack.new scope }
+
+  let(:scope) { double }
+  let(:controller_class) { ActionController::Base }
+  let(:request_class) { ActionController::TestRequest }
+  let(:response_class) { ActionDispatch::TestResponse }
+  let(:mock_request) do
+    if request_class.method(:create).arity == 0
+      request_class.create
+    else
+      request_class.create(controller_class)
+    end
+  end
+  let(:input) { :anything } # like, literally anything for now
+  let(:result) { matcher.matches? input }
 
   it 'supports block expectations' do
     expect(matcher.supports_block_expectations?).to be true
@@ -18,12 +30,9 @@ describe RedirectBack do
     expect(redirect_back).to be_a RedirectBack
   end
 
-  let(:result) { matcher.matches? input }
-  let(:input) { :anything } # like, literally anything for now
-
   context 'example scope has response but no request' do
     it 'fails with expected message' do
-      allow(scope).to receive(:response).and_return ActionController::TestResponse.new
+      allow(scope).to receive(:response).and_return response_class.new
       expect(result).to be false
       expect(matcher.failure_message).to include 'only valid for controller specs'
     end
@@ -31,7 +40,7 @@ describe RedirectBack do
 
   context 'example scope has request but no response' do
     it 'fails with expected message' do
-      allow(scope).to receive(:request).and_return ActionController::TestRequest.new
+      allow(scope).to receive(:request).and_return mock_request
       expect(result).to be false
       expect(matcher.failure_message).to include 'only valid for controller specs'
     end
@@ -43,28 +52,30 @@ describe RedirectBack do
       allow(scope).to receive(:response).and_return response
     end
     context 'request is not an ActionController::TestRequest' do
-      let(:request) { ActionDispatch::Request.new({}) }
-      let(:response) { ActionController::TestResponse.new }
+      let(:request_class) { Class.new }
+      let(:request) { request_class.new }
+      let(:response) { response_class.new }
       it 'fails with expected message' do
         expect(result).to be false
         expect(matcher.failure_message).to include 'expected test request to be',
                                                    'ActionController::TestRequest',
-                                                   'but was ActionDispatch::Request'
+                                                   "but was #{request_class}"
       end
     end
-    context 'response is not an ActionController::TestResponse' do
-      let(:request) { ActionController::TestRequest.new }
-      let(:response) { ActionDispatch::Response.new }
+    context 'response is not an ActionDispatch::TestResponse' do
+      let(:request) { mock_request }
+      let(:response_class) { Class.new }
+      let(:response) { response_class.new }
       it 'fails with expected message' do
         expect(result).to be false
         expect(matcher.failure_message).to include 'expected test response to be',
-                                                   'ActionController::TestResponse',
-                                                   'but was ActionDispatch::Response'
+                                                   'ActionDispatch::TestResponse',
+                                                   "but was #{response_class}"
       end
     end
     context 'request and response have correct types' do
-      let(:request) { ActionController::TestRequest.new }
-      let(:response) { ActionController::TestResponse.new }
+      let(:request) { mock_request }
+      let(:response) { response_class.new }
       context 'input is not a Proc' do
         let(:input) { :a_symbol }
         it 'fails with expected message' do
@@ -76,7 +87,7 @@ describe RedirectBack do
       context 'input is a Proc' do
         let(:input) { proc { :hello } }
         context 'response has incorrect status code' do
-          let(:response) { ActionController::TestResponse.new 200 }
+          let(:response) { response_class.new 200 }
           it 'fails with expected message' do
             expect(result).to be false
             expect(matcher.failure_message).to include 'expected the response',
@@ -86,14 +97,14 @@ describe RedirectBack do
         end
         context 'response has correct status code' do
           context 'response does not redirect back to given URL' do
-            let(:response) { ActionController::TestResponse.new 302 }
+            let(:response) { response_class.new 302 }
             it 'fails with expected message' do
               allow(scope).to receive(:assert_redirected_to).and_raise Minitest::Assertion
               expect(result).to be false
             end
           end
           context 'response redirects back to given URL' do
-            let(:response) { ActionController::TestResponse.new 302 }
+            let(:response) { response_class.new 302 }
             it 'passes' do
               allow(scope).to receive(:assert_redirected_to).and_return true
               expect(result).to be true

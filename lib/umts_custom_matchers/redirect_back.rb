@@ -1,3 +1,5 @@
+require 'action_controller'
+require 'action_controller/test_case'
 require 'rspec/rails/matchers'
 
 module UmtsCustomMatchers
@@ -7,7 +9,7 @@ module UmtsCustomMatchers
     REDIRECT_PATH_MATCHER = MATCHER_MODULE::RedirectTo::RedirectTo
 
     ALLOWED_REQUEST_TYPES = [ActionController::TestRequest].freeze
-    ALLOWED_RESPONSE_TYPES = [ActionController::TestResponse].freeze
+    ALLOWED_RESPONSE_TYPES = [ActionDispatch::TestResponse].freeze
 
     def initialize(scope)
       @scope = scope
