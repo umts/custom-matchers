@@ -17,38 +17,29 @@ module UmtsCustomMatchers
       @scope = scope
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/MethodLength
     def matches?(code)
       path = 'http://test.host/redirect'
+      status_matcher = STATUS_CODE_MATCHER.new :redirect
+      path_matcher = REDIRECT_PATH_MATCHER.new @scope, path
 
-      unless @scope.respond_to?(:request) && @scope.respond_to?(:response)
-        fail_spec_type and return false
-      end
-      unless ALLOWED_REQUEST_TYPES.include? @scope.request.class
-        fail_request_type and return false
-      end
-      unless ALLOWED_RESPONSE_TYPES.include? @scope.response.class
-        fail_response_type and return false
-      end
+      verify_spec_type or return false
+      verify_request_type or return false
+      verify_response_type or return false
+      verify_input_type(code) or return false
+
       @scope.request.env['HTTP_REFERER'] ||= path
-      unless code.is_a? Proc
-        fail_input_type code and return false
-      end
       code.call
       @response = @scope.response
-      status_matcher = STATUS_CODE_MATCHER.new :redirect
-      unless status_matcher.matches? @response
-        fail_status_code status_matcher and return false
-      end
-      path_matcher = REDIRECT_PATH_MATCHER.new @scope, path
-      unless path_matcher.matches? @response
-        fail_redirect_path path_matcher and return false
-      end
+
+      verify_status_code(status_matcher) or return false
+      verify_redirect_path(path_matcher) or return false
+
       true
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/MethodLength
 
     def failure_message
       @message
@@ -64,33 +55,51 @@ module UmtsCustomMatchers
 
     private
 
-    def fail_input_type(input)
+    def verify_input_type(input)
+      return true if input.is_a? Proc
+
       @message =
         "expected block argument, but received #{input.class}"
+      false
     end
 
-    def fail_redirect_path(matcher)
+    def verify_redirect_path(matcher)
+      return true if matcher.matches? @response
+
       @message = matcher.failure_message
+      false
     end
 
-    def fail_request_type
+    def verify_request_type
+      return true if ALLOWED_REQUEST_TYPES.include? @scope.request.class
+
       @message = "expected test request to be one of: \
                   #{ALLOWED_REQUEST_TYPES.join ', '}; \
                   but was #{@scope.request.class}"
+      false
     end
 
-    def fail_response_type
+    def verify_response_type
+      return true if ALLOWED_RESPONSE_TYPES.include? @scope.response.class
+
       @message = "expected test response to be one of: \
                   #{ALLOWED_RESPONSE_TYPES.join ', '}; \
                   but was #{@scope.response.class}"
+      false
     end
 
-    def fail_spec_type
+    def verify_spec_type
+      return true if @scope.respond_to?(:request) && @scope.respond_to?(:response)
+
       @message = 'The redirect_back matcher is only valid for controller specs.'
+      false
     end
 
-    def fail_status_code(matcher)
+    def verify_status_code(matcher)
+      return true if matcher.matches? @response
+
       @message = matcher.failure_message
+      false
     end
   end
 
