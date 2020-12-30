@@ -13,4 +13,4 @@ Metrics/BlockLength:
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
-    - 'lib/umts-custom-cops/version.rb'
+    - 'lib/umts_custom_cops/version.rb'
