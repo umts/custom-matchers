@@ -98,7 +98,7 @@ RSpec.describe UmtsCustomMatchers::RedirectBack do
                                                        'but it was 200'
           end
         end
-        context 'response has correct status code', focus: true do
+        context 'response has correct status code' do
           let(:response) { response_class.new 302 }
           context 'response does not redirect back to given URL' do
             it 'fails with expected message' do
