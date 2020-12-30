@@ -4,7 +4,13 @@ require 'action_controller'
 require 'action_controller/test_case'
 require 'rspec/rails/matchers'
 
+##
+#:nodoc:
 module UmtsCustomMatchers
+  ##
+  # Matcher for redirecting to "back". Asserts that the HTTP response code is
+  # a redirect, and also that the `Location` matches the HTTP_REFERER of the
+  # request.
   class RedirectBack
     MATCHER_MODULE = RSpec::Rails::Matchers
     STATUS_CODE_MATCHER = MATCHER_MODULE::HaveHttpStatus::GenericStatus
@@ -19,6 +25,10 @@ module UmtsCustomMatchers
 
     # rubocop:disable Metrics/CyclomaticComplexity
     # rubocop:disable Metrics/MethodLength
+
+    ##
+    # Returns `true` if response is a `302`, and the location matches the `HTTP_REFERER`
+    # of the request. `false` otherwise.
     def matches?(code)
       path = 'http://test.host/redirect'
       status_matcher = STATUS_CODE_MATCHER.new :redirect
@@ -41,14 +51,20 @@ module UmtsCustomMatchers
     # rubocop:enable Metrics/CyclomaticComplexity
     # rubocop:enable Metrics/MethodLength
 
+    ##
+    #:nodoc:
     def failure_message
       @message
     end
 
+    ##
+    #:nodoc:
     def failure_message_when_negated
       'expected response not to redirect back, but did'
     end
 
+    ##
+    #:nodoc:
     def supports_block_expectations?
       true
     end
@@ -103,6 +119,9 @@ module UmtsCustomMatchers
     end
   end
 
+  ##
+  # Wrapper method for `RedirectBack` can be used in examples if `UmtsCustomMatchers`
+  # is incuded.
   def redirect_back
     RedirectBack.new self
   end
