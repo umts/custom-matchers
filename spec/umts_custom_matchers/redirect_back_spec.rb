@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe UmtsCustomMatchers::RedirectBack do
+RSpec.describe UmtsCustomMatchers::RedirectBack do
   subject(:matcher) { described_class.new scope }
 
   let(:scope) { double }
@@ -99,15 +99,14 @@ describe UmtsCustomMatchers::RedirectBack do
           end
         end
         context 'response has correct status code' do
+          let(:response) { response_class.new 302 }
           context 'response does not redirect back to given URL' do
-            let(:response) { response_class.new 302 }
             it 'fails with expected message' do
               allow(scope).to receive(:assert_redirected_to).and_raise Minitest::Assertion
               expect(result).to be false
             end
           end
           context 'response redirects back to given URL' do
-            let(:response) { response_class.new 302 }
             it 'passes' do
               allow(scope).to receive(:assert_redirected_to).and_return true
               expect(result).to be true
