@@ -1,11 +1,38 @@
 language: ruby
 rvm:
-  - 2.1.8
-  - 2.2.4
-  - 2.3.0
+  - 2.5.8
+  - 2.6.6
+  - 2.7.2
+gemfile:
+  - gemfiles/Gemfile-rails50
+  - gemfiles/Gemfile-rails51
+  - gemfiles/Gemfile-rails52
+  - gemfiles/Gemfile-rails60
+  - gemfiles/Gemfile-rails61
+jobs:
+  exclude:
+    - rvm: 2.7.2
+      gemfile: gemfiles/Gemfile-rails50
+    - rvm: 2.7.2
+      gemfile: gemfiles/Gemfile-rails51
+    - rvm: 2.7.2
+      gemfile: gemfiles/Gemfile-rails52
+
 env: CODECLIMATE_REPO_TOKEN=2e3996c4e1980943b0b1350ecfccc3c7f1adf90952d7a6c176b4d4bcf4e6b0c6
-before_install: gem install bundler
+
+before_install:
+  - gem update --system
+  - gem install bundler
+install:
+  - bin/setup
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script: bundle exec rake
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
 notifications:
   email:
     recipients:
