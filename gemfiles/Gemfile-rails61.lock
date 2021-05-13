@@ -197,7 +197,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   pry-byebug
   rails (~> 6.1.0)
-  rake
+  rake (~> 13.0)
   rubocop
   simplecov
   umts-custom-matchers!
