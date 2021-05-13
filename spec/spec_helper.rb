@@ -4,7 +4,10 @@ require 'action_controller/railtie'
 require 'rspec/rails'
 require 'simplecov'
 
-SimpleCov.start { refuse_coverage_drop }
+SimpleCov.start do
+  refuse_coverage_drop
+  add_filter '/gemfiles'
+end
 require 'umts_custom_matchers'
 
 RSpec.configure do |config|
