@@ -3,22 +3,16 @@ cache:
   directories:
     - gemfiles/vendor/bundle
 rvm:
-  - 2.5.8
-  - 2.6.6
-  - 2.7.2
+  - 2.5.9
+  - 2.6.7
+  - 2.7.3
 gemfile:
-  - gemfiles/Gemfile-rails50
-  - gemfiles/Gemfile-rails51
   - gemfiles/Gemfile-rails52
   - gemfiles/Gemfile-rails60
   - gemfiles/Gemfile-rails61
 jobs:
   exclude:
-    - rvm: 2.7.2
-      gemfile: gemfiles/Gemfile-rails50
-    - rvm: 2.7.2
-      gemfile: gemfiles/Gemfile-rails51
-    - rvm: 2.7.2
+    - rvm: 2.7.3
       gemfile: gemfiles/Gemfile-rails52
 
 env:
