@@ -37,12 +37,11 @@ Gem::Specification.new do |spec|
                                `git ls-files -z`.split("\x0")
   spec.require_paths         = ['lib']
 
-  spec.required_ruby_version = '>= 2.4'
+  spec.required_ruby_version = '>= 2.5'
 
-  spec.add_dependency 'rspec-rails', '>= 3.0', '<= 5.0'
+  spec.add_dependency 'rspec-rails', '>= 3.0', '<= 6.0'
 
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'codeclimate-test-reporter'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop'
