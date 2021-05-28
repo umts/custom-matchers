@@ -3,6 +3,12 @@
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'umts_custom_matchers/version'
+
+RAKE = Gem::Dependency.new('rake', '~> 13.0')
+if File.basename($0) == 'bundle' && !ARGV.include?('exec')
+  require 'rubygems/dependency_installer'
+  Gem::DependencyInstaller.new.install(RAKE)
+end
 require 'rake'
 
 Gem::Specification.new do |spec|
@@ -43,7 +49,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'pry-byebug'
-  spec.add_development_dependency 'rake'
+  spec.add_development_dependency RAKE.name, RAKE.requirements_list
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'simplecov'
 end
