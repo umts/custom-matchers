@@ -1,17 +1,18 @@
 UmtsCustomMatchers
 ==================
 
+> [!WARNING]
+> **This repository is archived**
+>
+> UMTS no longer uses this gem in our production applications, and no further
+> maintenance should be expected. 
+
 Custom RSpec Rails-related matchers, used for UMass Transit's internal Rails
 development process.
 
 Much of the inspiration for these solutions came from inspection of the
 rspec-rails source code, so thanks to the rspec-rails team for making their
 source code public.
-
-[![Build Status][travis-badge]][travis-link]
-[![Test Coverage][cc-coverage-badge]][cc-coverage-link]
-[![Code Climate][cc-badge]][cc-link]
-[![Issue Count][cc-issue-badge]][cc-issue-link]
 
 Installation
 ------------
@@ -75,15 +76,6 @@ License
 -------
 
 The gem is available as open source under the terms of the [MIT License][lic].
-
-[travis-badge]: https://travis-ci.org/umts/custom-matchers.svg?branch=master
-[travis-link]: https://travis-ci.org/umts/custom-matchers
-[cc-coverage-badge]: https://codeclimate.com/github/umts/custom-matchers/badges/coverage.svg
-[cc-coverage-link]: https://codeclimate.com/github/umts/custom-matchers/coverage
-[cc-badge]: https://codeclimate.com/github/umts/custom-matchers/badges/gpa.svg
-[cc-link]: https://codeclimate.com/github/umts/custom-matchers
-[cc-issue-badge]: https://codeclimate.com/github/umts/custom-matchers/badges/issue_count.svg
-[cc-issue-link]: https://codeclimate.com/github/umts/custom-matchers
 
 [rg]: https://rubygems.org
 [lic]: http://opensource.org/licenses/MIT
